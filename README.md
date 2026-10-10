@@ -4,11 +4,11 @@ A small, working Vue 3 component playground exploring explicit states and keyboa
 
 [Open the playground](https://neha-pd.github.io/clearvue/) · [Neha's GitHub](https://github.com/neha-pd)
 
-![ClearVue playground](artifacts/clearvue-expanded-desktop.png)
+![ClearVue playground](artifacts/clearvue-showcase-desktop.png)
 
 ## What works
 
-Thirteen reusable Vue components in [`src/components.js`](src/components.js) and [`src/extended.js`](src/extended.js), used by the live playground:
+Nineteen reusable Vue components in [`src/components.js`](src/components.js) [`src/extended.js`](src/extended.js), and [`src/showcase.js`](src/showcase.js), used by the live playground:
 
 | Component | Public interface | Behavior |
 | --- | --- | --- |
@@ -56,9 +56,39 @@ import { CvTagInput, CvStepper } from './src/extended.js';
 
 Keep step IDs unique and the step array stable while mounted. Never place `CvInlineEdit` inside another form because it owns its own form. Incoming model changes during an inline edit do not overwrite the unsaved draft; the most recent save wins—resolve collaboration conflicts in your application. File type checks are a usability aid, **not a security boundary**: inspect and validate files again on a server before processing. Copy feedback requires actual clipboard success; permission denial does not claim a copy succeeded. Labels and descriptions are rendered as text, not HTML.
 
+## Showcase additions in 0.3
+
+| Component | Public interface | Responsibility |
+| --- | --- | --- |
+| `CvBook` | zero-based `v-model`, `title`, `pages: [{title,body,note?}]` | Native previous/next, Left/Right/Home/End while focused inside, title focus after navigation, page-turn animation with reduced-motion override. Empty pages show an explanation. Text only. |
+| `CvReceipt` | `receipt: {merchant,id,date,currency,items:[{label,amountCents}],note?}`, `fictional` (true); events `copy`, `download`, `print`, `error` | Derives a total from integer cents; downloads a `.txt` receipt, copies actual text, invokes browser print. No payment confirmation is inferred. Supply validated finite integer amounts and a supported ISO currency. |
+| `CvPaymentState` | `state` (`success`/`pending`/`failure`), display strings `amount`, `reference`, `message`, `fictional` (true); `retry`, `done` events | Presentation only. **Never** use this component's state or retry event as proof that a payment succeeded or that retrying is safe. A backend/provider must own reconciliation and idempotency. |
+| `CvMascot` | `name` (Pip), `enabled` (true); `pause-change(boolean)` | Decorative, pointer-events disabled; follows a fine pointer with direct DOM transforms in a single animation loop. Pause/resume, reduced-motion and coarse-pointer stationary fallback. Cleans up its listeners/animation when unmounted. |
+| `CvChat` | `messages`, `status` (`idle`/`loading`/`streaming`/`error`), `error`, `title`, `simulated` (true); `send(text)`, `retry`, `stop` | Controlled presentation. Enter sends, Shift+Enter adds a line, IME composition is respected. Plain text, HTTP(S) citations, embedded `CvChart`. Announcements describe state changes instead of every streaming token. No model, network, persistence or Markdown/HTML execution. |
+| `CvChart` | `type` (`line`/`area`/`bar`/`donut`/`radar`/`heatmap`), `title`, `description`, `data:[{label,value,column?,row?}]`, `unit` | Apache ECharts SVG renderer, responsive ResizeObserver, theme updates, reduced-motion-aware animation, keyboard-readable values and full data table. Currently accepts finite non-negative numbers only. Heatmap uses optional row/column labels. |
+
+`CvChat` messages have `{id,role:'user'|'assistant',text,citations?:[{title,url}],chart?:{type,title,description,data,unit}}`. Keep message IDs unique. Parent code owns asynchronous requests, cancellation, retry deduplication, authorization and any message retention. This demo's timer produces a clearly fictional dataset; its links are framework references, not evidence for simulated business results. No user content is sent to an AI service. The message history is focusable and scrollable without forcing a reader to the bottom.
+
+```html
+<CvBook v-model="page" title="Field notes" :pages="[
+  {title:'A useful first step',body:'Start with the task.'},
+  {title:'A clear way back',body:'Preserve the draft.'}
+]" />
+<CvPaymentState :state="providerState" amount="$128.00"
+  reference="SAMPLE-0128" :fictional="true" @retry="requestSafeRetry" />
+<CvChat :messages="messages" :status="status" :error="error"
+  @send="send" @retry="retry" @stop="stop" :simulated="true" />
+<CvChart type="bar" title="Sample review activity" unit="reviews"
+  :data="[{label:'Mon',value:8},{label:'Tue',value:14}]" />
+```
+
+The browser demo loads the official npm `echarts` **6.1.0** distribution from `vendor/echarts.min.js`; include that script before using `CvChart` or chart messages. No runtime CDN is required. Origin/version/integrity metadata is in `vendor/echarts-source.json`; Apache2 license and notice files are retained. ECharts adds approximately1.12MB of uncompressed JavaScript; a production bundle should import only its required chart modules. The existing six primitives and seven0.2 components do not depend on ECharts.
+
+The mascot is deliberately decorative and CSS-drawn, not an image of a person or a fake product screenshot. Book copy is original sample prose. Receipt merchant, amounts and payment states are fictional. Print uses the browser's dialog (not silent printing); the included print stylesheet isolates a receipt on this demo page. Print rules may need scoping in a host application.
+
 ## Run locally
 
-No build step or package-manager installation required. Vue's official full browser ESM distribution is pinned and vendored, along with its MIT license. Fonts are self-hosted with their OFL license.
+No build step or package-manager installation required. ECharts and Vue's official full browser ESM distribution is pinned and vendored, along with its MIT license. Fonts are self-hosted with their OFL license.
 
 ```sh
 python3 -m http.server 8837
@@ -95,11 +125,14 @@ python3 -m pip install playwright
 python3 -m playwright install chromium
 python3 tests/browser.py http://localhost:8837
 python3 tests/extended.py http://localhost:8837
+python3 tests/showcase.py http://localhost:8837
 ```
 
 Checks cover dialog initial focus, focus containment, Escape/return focus; tab arrow/Home/End behavior; input label/error associations and validation recovery; button/disclosure keyboard behavior; alert updates; theme persistence; and mobile overflow. Results and actual screenshots are in `artifacts/`. The extended suite covers all seven additions: range endpoints, command search/focus/disabled actions, tag limits and escaped text, draft cancel/save, step validation/focus, file type/size rejection and clearing, and actual clipboard readback plus permission-denial fallback. Every new preview is checked for overflow at390px.
 
 Still needed before production use: manual VoiceOver/NVDA testing, Firefox/Safari coverage, systematic contrast audit, nested overlay handling, dynamically changing tabs, server-rendering validation, and application-specific validation. A passing browser interaction suite is not accessibility certification. Dialog depends on native `HTMLDialogElement.showModal()` support. The full browser Vue build uses runtime template compilation; a strict CSP application should precompile components with a build tool.
+
+The showcase suite additionally exercises book focus/boundaries, receipt download contents and clipboard, print invocation, all payment states/events, mascot motion/pause/preferences, six chart renderers with keyboard/table alternatives, simulated chat streaming/error/retry/stop, and touch/mobile fallbacks. Print-dialog invocation is intercepted in automation; physical printing and screen-reader behavior require manual review.
 
 ## Design decisions
 
@@ -120,4 +153,4 @@ The [Made With Vue.js showcase](https://madewithvuejs.com/) informed the expansi
 - Expand disabled and asynchronous states and document edge cases.
 - Package only after the API and accessibility review stabilize.
 
-MIT licensed. Vue and Manrope retain their respective upstream licenses in `vendor/` and `assets/`.
+MIT licensed. Vue, Apache ECharts and Manrope retain their respective upstream licenses in `vendor/` and `assets/`.

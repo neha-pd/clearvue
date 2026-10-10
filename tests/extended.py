@@ -9,6 +9,7 @@ async def main():
   browser=await pw.chromium.launch();context=await browser.new_context(viewport={'width':1440,'height':1100},permissions=['clipboard-read','clipboard-write']);page=await context.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
   await page.goto(base,wait_until='networkidle')
   async def select(name):await page.locator('nav').get_by_role('button',name=name).click()
+  await select('Comparison')
   slider=page.get_by_role('slider',name='Reveal dark');await slider.focus();await page.keyboard.press('End');assert await slider.input_value()=='100';await page.keyboard.press('Home');assert await slider.input_value()=='0';await page.keyboard.press('ArrowRight');assert await slider.input_value()=='1';await slider.fill('50')
   assert await page.locator('.cv-compare-frame img').evaluate_all('(imgs)=>imgs.every(x=>x.complete&&x.naturalWidth>0)')
   checks.append('Comparison: loaded actual images, native range Home/End/arrow updates')

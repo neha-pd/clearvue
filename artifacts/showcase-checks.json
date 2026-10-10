@@ -1,0 +1,15 @@
+{
+  "base_url": "http://127.0.0.1:8845",
+  "checks": [
+    "Book: controlled page changes, title focus, arrow/Home/End and edge buttons",
+    "Receipt: fictional label, cents total, actual download and clipboard, print invocation",
+    "Payment states: success/pending/failure rendering and parent retry/done events",
+    "Mascot: pointer transform updates, pause/resume, reduced-motion stationary mode",
+    "Charts: all six SVG types render, keyboard value inspection and populated tables",
+    "Chat: scripted loading/streaming, chart+citation messages, HTML escaping, error/retry, stop",
+    "Mobile: all six showcase surfaces and every chart type fit390px",
+    "Reduced motion: book and pending-payment animation disabled",
+    "Coarse pointer: companion stays stationary without needing a mouse"
+  ],
+  "runtime_errors": []
+}

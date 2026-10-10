@@ -14,6 +14,7 @@ async def main():
         await page.goto(base,wait_until='networkidle')
         await page.locator('h1').wait_for()
         await page.screenshot(path=str(output/'clearvue-desktop.png'),full_page=True)
+        await page.get_by_role('button',name='Dialog Overlay',exact=True).click()
         trigger=page.get_by_role('button',name='Open dialog')
         await trigger.click()
         dialog=page.get_by_role('dialog')

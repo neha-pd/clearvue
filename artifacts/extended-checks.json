@@ -1,0 +1,14 @@
+{
+  "base_url": "http://127.0.0.1:8845",
+  "checks": [
+    "Comparison: loaded actual images, native range Home/End/arrow updates",
+    "Command menu: search/empty/disabled, focus, arrows, selection, Escape restoration",
+    "Tags: controlled updates, duplicate/limit feedback, escaped text, removal focus",
+    "Inline edit: draft cancellation, empty validation, model commit, focus return",
+    "Stepper: validation gate, heading focus, retained draft, back, finish and restart",
+    "File picker: type and size rejection, valid selection, removal and focus",
+    "Copy field: actual clipboard readback, denied fallback and selected text",
+    "All seven additions: mobile overflow and dark/light captures"
+  ],
+  "runtime_errors": []
+}

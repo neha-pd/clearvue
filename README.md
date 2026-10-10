@@ -4,11 +4,11 @@ A small, working Vue 3 component playground exploring explicit states and keyboa
 
 [Open the playground](https://neha-pd.github.io/clearvue/) · [Neha's GitHub](https://github.com/neha-pd)
 
-![ClearVue playground](artifacts/clearvue-desktop.png)
+![ClearVue playground](artifacts/clearvue-expanded-desktop.png)
 
 ## What works
 
-Six reusable Vue components in [`src/components.js`](src/components.js), used by the live playground:
+Thirteen reusable Vue components in [`src/components.js`](src/components.js) and [`src/extended.js`](src/extended.js), used by the live playground:
 
 | Component | Public interface | Behavior |
 | --- | --- | --- |
@@ -20,6 +20,41 @@ Six reusable Vue components in [`src/components.js`](src/components.js), used by
 | `CvTabs` | `label`, `tabs: [{ id, label, content }]`; optional named slot matching each tab id | Automatic activation, roving tabindex, arrows and Home/End |
 
 Each instance uses Vue `useId()` for identifiers. Tabs are horizontal; provide unique, stable tab IDs. Keep the tabs array stable while mounted in this prototype.
+
+## Seven additions in 0.2
+
+| Component | Public interface | Behavior |
+| --- | --- | --- |
+| `CvComparison` | numeric `v-model` (0–100), `beforeSrc`, `afterSrc`, `beforeLabel`, `afterLabel`, required `description` | Native range reveal with arrow/Home/End support; direct links to each source image. No pointer-only gesture required. |
+| `CvCommandMenu` | boolean `v-model`, `title`, `commands: [{id,label,description,disabled?}]`; `select(item)` | Local search, native result buttons, arrow/Home/End movement, empty state, native modal focus/Escape. No automatic global shortcuts. |
+| `CvTagInput` | string-array `v-model`, `label`, `max` (5), `disabled` | Trimmed case-insensitive unique tags, Enter/add, max feedback, remove with focus return. 60 characters per new tag. |
+| `CvInlineEdit` | string `v-model`, `label`, `disabled`, `maxLength` (80) | Isolated draft; Enter saves nonempty text, Escape cancels; focus returns to Edit. |
+| `CvStepper` | zero-based numeric `v-model`, `steps: [{id,label}]`, `label`, `canContinue`, `blockedReason`; `complete` | Parent-owned validation, heading focus, Back/Continue/Finish. Named slots use each step id and receive `{index}`. |
+| `CvFilePicker` | `label`, `accept` (.pdf,.txt), `maxBytes` (2,000,000), `disabled`; `select(File|null)`, `error(message)` | One native file at a time, local extension/MIME and size checks, remove. Does not read file contents, upload or persist files. |
+| `CvCopyField` | required `value`, `label`, `disabled` | Clipboard API with progress/result feedback; denial selects text for manual copying. HTTPS/localhost needed for Clipboard API. |
+
+The comparison uses actual captures of the original ClearVue demo (`artifacts/theme-light.png` and `theme-dark.png`), not rendered mockups. It is a visual comparison; supply a useful textual `description` for its content. The live command menu emits demo selections only; it neither navigates nor submits anything. The stepper's parent must save data and enforce business rules; a completion event is not a server submission.
+
+### Compose a workflow
+
+```js
+import { CvTagInput, CvStepper } from './src/extended.js';
+// Register these components in the same createApp instance as your own form.
+```
+
+```html
+<CvTagInput v-model="focusAreas" label="Project focus" :max="5" />
+<CvStepper v-model="step" :steps="[
+  { id: 'brief', label: 'Brief' },
+  { id: 'review', label: 'Review' }
+]" :can-continue="step !== 0 || !!title.trim()"
+  blocked-reason="Give the brief a title." @complete="prepareDraft">
+  <template #brief><input v-model="title" aria-label="Brief title"></template>
+  <template #review><p>{{ title }}</p></template>
+</CvStepper>
+```
+
+Keep step IDs unique and the step array stable while mounted. Never place `CvInlineEdit` inside another form because it owns its own form. Incoming model changes during an inline edit do not overwrite the unsaved draft; the most recent save wins—resolve collaboration conflicts in your application. File type checks are a usability aid, **not a security boundary**: inspect and validate files again on a server before processing. Copy feedback requires actual clipboard success; permission denial does not claim a copy succeeded. Labels and descriptions are rendered as text, not HTML.
 
 ## Run locally
 
@@ -59,9 +94,10 @@ Include `styles.css` for the prototype styles. The file currently contains both 
 python3 -m pip install playwright
 python3 -m playwright install chromium
 python3 tests/browser.py http://localhost:8837
+python3 tests/extended.py http://localhost:8837
 ```
 
-Checks cover dialog initial focus, focus containment, Escape/return focus; tab arrow/Home/End behavior; input label/error associations and validation recovery; button/disclosure keyboard behavior; alert updates; theme persistence; and mobile overflow. Results and actual screenshots are in `artifacts/`.
+Checks cover dialog initial focus, focus containment, Escape/return focus; tab arrow/Home/End behavior; input label/error associations and validation recovery; button/disclosure keyboard behavior; alert updates; theme persistence; and mobile overflow. Results and actual screenshots are in `artifacts/`. The extended suite covers all seven additions: range endpoints, command search/focus/disabled actions, tag limits and escaped text, draft cancel/save, step validation/focus, file type/size rejection and clearing, and actual clipboard readback plus permission-denial fallback. Every new preview is checked for overflow at390px.
 
 Still needed before production use: manual VoiceOver/NVDA testing, Firefox/Safari coverage, systematic contrast audit, nested overlay handling, dynamically changing tabs, server-rendering validation, and application-specific validation. A passing browser interaction suite is not accessibility certification. Dialog depends on native `HTMLDialogElement.showModal()` support. The full browser Vue build uses runtime template compilation; a strict CSP application should precompile components with a build tool.
 
@@ -74,6 +110,8 @@ Still needed before production use: manual VoiceOver/NVDA testing, Firefox/Safar
 - Client work, adoption metrics and certifications are not implied by this demo.
 
 Reference patterns: [Vue browser ESM](https://vuejs.org/guide/quick-start.html#using-the-es-module-build), [WAI tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/), [native dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog). Visual direction informed by [taste-skill](https://github.com/leonxlnx/taste-skill).
+
+The [Made With Vue.js showcase](https://madewithvuejs.com/) informed the expansion toward useful, inspectable interaction patterns. No showcase component code or visual assets were copied. Modal behavior follows the [WAI modal dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/); controlled state uses the [Vue model contract](https://vuejs.org/guide/components/v-model.html).
 
 ## Roadmap
 

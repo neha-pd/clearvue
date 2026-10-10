@@ -1,0 +1,15 @@
+{
+  "base_url": "http://127.0.0.1:8837",
+  "checks": [
+    "Dialog: initial focus, modal focus containment, Escape, trigger focus restoration",
+    "Tabs: arrows wrap, Home/End, selected state and roving focus",
+    "Input: label association, error relationship, invalid state, valid recovery and focus",
+    "Disclosure: Enter/Space and expanded state",
+    "Button: keyboard activation and native disabled state",
+    "Alert: live status updates",
+    "Theme: toggle and local persistence",
+    "Mobile: 390px viewport without horizontal page overflow",
+    "No browser runtime errors"
+  ],
+  "errors": []
+}

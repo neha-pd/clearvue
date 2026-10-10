@@ -1,5 +1,5 @@
 {
-  "base_url": "http://127.0.0.1:8845",
+  "base_url": "http://127.0.0.1:8871",
   "checks": [
     "Dialog: initial focus, modal focus containment, Escape, trigger focus restoration",
     "Tabs: arrows wrap, Home/End, selected state and roving focus",

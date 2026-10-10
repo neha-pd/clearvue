@@ -11,6 +11,7 @@ async def main():
   async def select(name):await page.locator('nav').get_by_role('button',name=name).click()
   await select('Comparison')
   slider=page.get_by_role('slider',name='Reveal dark');await slider.focus();await page.keyboard.press('End');assert await slider.input_value()=='100';await page.keyboard.press('Home');assert await slider.input_value()=='0';await page.keyboard.press('ArrowRight');assert await slider.input_value()=='1';await slider.fill('50')
+  await page.wait_for_function('Array.from(document.querySelectorAll(".cv-compare-frame img")).every(x=>x.complete&&x.naturalWidth>0)')
   assert await page.locator('.cv-compare-frame img').evaluate_all('(imgs)=>imgs.every(x=>x.complete&&x.naturalWidth>0)')
   checks.append('Comparison: loaded actual images, native range Home/End/arrow updates')
   await page.screenshot(path=str(out/'clearvue-expanded-desktop.png'),full_page=True)

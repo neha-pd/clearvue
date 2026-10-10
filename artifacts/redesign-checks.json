@@ -1,0 +1,12 @@
+{
+  "passed": 6,
+  "checks": [
+    "Search matches names, categories and descriptions; empty state resets to all19 components.",
+    "Code inspector and real clipboard preserve the live component state when returning to Preview.",
+    "Shareable component URL restores the selected demo after reload.",
+    "All19 existing components fit the new Narrow inspection canvas on a wide desktop viewport.",
+    "Mobile search reaches distant navigation groups; original modal interaction still works and light/dark layouts fit390px.",
+    "Fresh browser follows system dark mode before an explicit stored theme preference."
+  ],
+  "runtime_errors": []
+}

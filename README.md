@@ -33,7 +33,7 @@ Each instance uses Vue `useId()` for identifiers. Tabs are horizontal; provide u
 | `CvFilePicker` | `label`, `accept` (.pdf,.txt), `maxBytes` (2,000,000), `disabled`; `select(File|null)`, `error(message)` | One native file at a time, local extension/MIME and size checks, remove. Does not read file contents, upload or persist files. |
 | `CvCopyField` | required `value`, `label`, `disabled` | Clipboard API with progress/result feedback; denial selects text for manual copying. HTTPS/localhost needed for Clipboard API. |
 
-Comparison sources accept HTTP(S) and relative paths; script/data URLs are not rendered or linked. The comparison uses actual captures of the original ClearVue demo (`artifacts/theme-light.png` and `theme-dark.png`), not rendered mockups. It is a visual comparison; supply a useful textual `description` for its content. The live command menu emits demo selections only; it neither navigates nor submits anything. The stepper's parent must save data and enforce business rules; a completion event is not a server submission.
+Comparison sources accept HTTP(S) and relative paths; script/data URLs are not rendered or linked. The comparison uses actual captures of the current ClearVue demo (`artifacts/theme-light.png` and `theme-dark.png`), not rendered mockups. It is a visual comparison; supply a useful textual `description` for its content. The live command menu emits demo selections only; it neither navigates nor submits anything. The stepper's parent must save data and enforce business rules; a completion event is not a server submission.
 
 ### Compose a workflow
 
@@ -154,3 +154,23 @@ The [Made With Vue.js showcase](https://madewithvuejs.com/) informed the expansi
 - Package only after the API and accessibility review stabilize.
 
 MIT licensed. Vue, Apache ECharts and Manrope retain their respective upstream licenses in `vendor/` and `assets/`.
+
+
+## Interface lab redesign
+
+The playground now groups all 19 components into Expressive interfaces, Everyday workflows and Foundations. Search matches the component name, category and description. A selected component is reflected in `?component=...` so the current example can be shared or reloaded.
+
+Use **Vue code** to inspect and copy the actual documented template, then **Preview** to return without losing the demo's current state. **Narrow** constrains the live canvas to a compact width on desktop; it is a layout preview, not a browser or device emulator. The library navigation scrolls on narrow screens, and search can reach every group directly.
+
+The first visit follows the operating system color preference. An explicit theme choice is stored in this browser. Payment, receipt and scripted chat examples remain fictional and local; no server, AI provider or payment service was added.
+
+Original design research and decisions are recorded in `artifacts/design-references/README.md`. No third-party reference art is used as page imagery. Actual redesign screenshots are `artifacts/clearvue-redesign-desktop.png`, `clearvue-redesign-mobile.png`, `clearvue-redesign-dark-mobile.png` and `clearvue-redesign-code.png`.
+
+Additional browser checks:
+
+```sh
+python tests/redesign.py http://127.0.0.1:8871
+python tests/axe.py http://127.0.0.1:8871
+```
+
+The axe check uses the local test tool at `../../reports/qa-tools/node_modules/axe-core/axe.min.js`; it is not a runtime dependency. Automated checks do not establish full accessibility conformance or replace assistive-technology testing.

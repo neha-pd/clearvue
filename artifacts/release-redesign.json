@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-10T23:51:09.629185+00:00",
+  "status": "Ready for root review/publication; no git mutations",
+  "changes": [
+    "Three searchable component groups, empty-state focus recovery",
+    "Shareable component deep links",
+    "Preview/code inspection with retained state and real clipboard",
+    "Wide/narrow preview for all19 components",
+    "Custom native radio/switch/file surfaces",
+    "System theme before stored preference; mobile navigation",
+    "Actual current theme-comparison captures"
+  ],
+  "checks": {
+    "original": 9,
+    "extended": 9,
+    "showcase": 9,
+    "redesign": 6,
+    "total_behavior": 33,
+    "axe": "Zero WCAG2A/AA/2.1AA violations across6 representative components in each theme",
+    "javascript_syntax": true,
+    "git_diff_check": true
+  },
+  "screenshots": [
+    "clearvue-redesign-desktop.png",
+    "clearvue-redesign-mobile.png",
+    "clearvue-redesign-dark-mobile.png",
+    "clearvue-redesign-code.png"
+  ],
+  "references": "artifacts/design-references/README.md",
+  "limitations": [
+    "Browser ESM prototype, not npm package",
+    "Scripted local chat; no model calls or payments",
+    "Automated accessibility checks do not establish full conformance"
+  ],
+  "publishing_note": "Research screenshots in artifacts/design-references are for internal reference; page does not embed third-party artwork."
+}

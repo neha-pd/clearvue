@@ -1,5 +1,5 @@
 {
-  "base_url": "http://127.0.0.1:8845",
+  "base_url": "http://127.0.0.1:8871",
   "checks": [
     "Comparison: loaded actual images, native range Home/End/arrow updates",
     "Command menu: search/empty/disabled, focus, arrows, selection, Escape restoration",

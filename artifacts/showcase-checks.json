@@ -1,5 +1,5 @@
 {
-  "base_url": "http://127.0.0.1:8845",
+  "base_url": "http://127.0.0.1:8871",
   "checks": [
     "Book: controlled page changes, title focus, arrow/Home/End and edge buttons",
     "Receipt: fictional label, cents total, actual download and clipboard, print invocation",

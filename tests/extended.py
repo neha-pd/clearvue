@@ -28,6 +28,10 @@ async def main():
    await select(component);assert await page.evaluate('document.documentElement.scrollWidth<=innerWidth'),component
   await select('Comparison');await page.screenshot(path=str(out/'clearvue-expanded-mobile.png'),full_page=True)
   await select('Command menu');await launcher.click();await page.screenshot(path=str(out/'clearvue-command-mobile.png'));assert await page.evaluate('document.documentElement.scrollWidth<=innerWidth');await page.keyboard.press('Escape');checks.append('All seven additions: mobile overflow and dark/light captures')
+  await page.evaluate("""async()=>{const {createApp}=await import('./vendor/vue.esm-browser.prod.js');const {CvComparison}=await import('./src/extended.js');const host=document.createElement('div');host.id='security-fixture';document.body.append(host);createApp({components:{CvComparison},template:'<CvComparison before-src="javascript:alert(1)" after-src="data:text/html,test" description="Unsafe URL fixture" />'}).mount(host);} """)
+  assert await page.locator('#security-fixture a[href]').count()==0
+  assert await page.locator('#security-fixture img[src]').count()==0
+  checks.append('Comparison: script/data source URLs rejected for images and links')
   assert not errors,errors
   (out/'extended-checks.json').write_text(json.dumps({'base_url':base,'checks':checks,'runtime_errors':errors},indent=2));print(json.dumps({'passed':len(checks),'checks':checks},indent=2));await browser.close()
 asyncio.run(main())

@@ -33,7 +33,7 @@ Each instance uses Vue `useId()` for identifiers. Tabs are horizontal; provide u
 | `CvFilePicker` | `label`, `accept` (.pdf,.txt), `maxBytes` (2,000,000), `disabled`; `select(File|null)`, `error(message)` | One native file at a time, local extension/MIME and size checks, remove. Does not read file contents, upload or persist files. |
 | `CvCopyField` | required `value`, `label`, `disabled` | Clipboard API with progress/result feedback; denial selects text for manual copying. HTTPS/localhost needed for Clipboard API. |
 
-The comparison uses actual captures of the original ClearVue demo (`artifacts/theme-light.png` and `theme-dark.png`), not rendered mockups. It is a visual comparison; supply a useful textual `description` for its content. The live command menu emits demo selections only; it neither navigates nor submits anything. The stepper's parent must save data and enforce business rules; a completion event is not a server submission.
+Comparison sources accept HTTP(S) and relative paths; script/data URLs are not rendered or linked. The comparison uses actual captures of the original ClearVue demo (`artifacts/theme-light.png` and `theme-dark.png`), not rendered mockups. It is a visual comparison; supply a useful textual `description` for its content. The live command menu emits demo selections only; it neither navigates nor submits anything. The stepper's parent must save data and enforce business rules; a completion event is not a server submission.
 
 ### Compose a workflow
 

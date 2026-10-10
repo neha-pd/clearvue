@@ -8,7 +8,8 @@
     "Stepper: validation gate, heading focus, retained draft, back, finish and restart",
     "File picker: type and size rejection, valid selection, removal and focus",
     "Copy field: actual clipboard readback, denied fallback and selected text",
-    "All seven additions: mobile overflow and dark/light captures"
+    "All seven additions: mobile overflow and dark/light captures",
+    "Comparison: script/data source URLs rejected for images and links"
   ],
   "runtime_errors": []
 }
